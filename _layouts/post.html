@@ -8,12 +8,10 @@ layout: default
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: date_format }}</time>
   </header>
 {{ content }}
-  {% if site.comments.isso %}
-  <hr><div id="isso-thread"></div>
-  {% endif %}
   {% if site.comments.disqus %}
-  <hr><div id="disqus_thread"></div>
-  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  <hr>
+  <a href="#disqus_thread" id="load-comments" class="ghost">Load Comments</a>
+  <div id="disqus_thread"></div>
   {% endif %}
 </article>
 {% if site.post_footer %}
@@ -25,5 +23,18 @@ layout: default
 {% endif %}
 {% endif %}
 
-{% if site.comments.disqus %}<script src="//{{ site.comments.disqus }}.disqus.com/embed.js" async></script>{% endif %}
-{% if site.comments.isso %}<script data-isso="http://{{ site.comments.isso }}" src="//{{ site.comments.isso }}/js/embed.min.js"></script>{% endif %}
+{% if site.comments.disqus %}
+<script>
+(function(){
+    document.getElementById('load-comments').addEventListener('click', function(e){
+        e.preventDefault();
+        e.target.remove();
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://{{ site.comments.disqus }}.disqus.com/embed.js'; 
+        document.getElementsByTagName('body')[0].appendChild(script);
+    })
+})()
+</script>
+<script id="dsq-count-scr" src="https://{{ site.comments.disqus }}.disqus.com/count.js" async></script>
+{% endif %}
